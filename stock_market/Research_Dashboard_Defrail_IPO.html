@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investment & Research Intelligence Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f8f7f4; color: #1f2937; }
+        
+        /* Chart Container Styling - MANDATORY */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container { height: 350px; }
+        }
+
+        .tab-active { border-bottom: 2px solid #ea580c; color: #ea580c; font-weight: 600; }
+        .tab-inactive { color: #6b7280; }
+        .tab-inactive:hover { color: #374151; }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+
+        .metric-card { transition: transform 0.2s; }
+        .metric-card:hover { transform: translateY(-2px); }
+    </style>
+    <!-- Chosen Palette: Warm Neutrals with Clay Orange Accent (#ea580c) -->
+    <!-- Application Structure Plan: 
+         1. Dashboard Layout: A clean, tabbed interface separating the two distinct requests (IPO Investment vs. Academic Research).
+         2. IPO Intelligence Tab: Focuses on "Post-Bid" actions. Since the specific company "Defrail" data is scarce/ambiguous, I implemented an "Interactive Analysis Engine" where the user inputs the live GMP/Price to get a "Buy/Sell" signal. This is more useful than static (and potentially wrong) data.
+         3. Research Datasets Tab: A structured resource list for the dataset query. Includes a "Sample Visualization" to demonstrate the expected data shape (Correlation between Screen Time & Depression).
+         4. Interaction: Users can toggle tabs, filter dataset lists, and use the IPO calculator. 
+    -->
+    <!-- Visualization & Content Choices:
+         1. IPO Gain Calculator (Doughnut Chart): Shows the breakdown of Investment vs. Profit. Goal: Inform financial outcome.
+         2. Risk Meter (Gauge/Bar): Visualizes the risk profile of Tech IPOs. Goal: Inform decision.
+         3. Dataset Trends (Scatter Plot - Plotly): Demonstrates the specific "Smartphone vs Depression" correlation requested. Goal: Relationships.
+         4. Resource Table (HTML List): Organized list of dataset sources. Goal: Organize.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="bg-[#f8f7f4] min-h-screen flex flex-col">
+
+    <!-- Navigation -->
+    <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-xl font-bold text-gray-800 tracking-tight">Invest<span class="text-orange-600">Research</span> Hub</span>
+                </div>
+                <div class="flex space-x-8 items-center">
+                    <button onclick="switchTab('ipo')" id="nav-ipo" class="tab-active h-16 px-1 inline-flex items-center text-sm transition-colors">
+                        IPO Intelligence: Defrail
+                    </button>
+                    <button onclick="switchTab('research')" id="nav-research" class="tab-inactive h-16 px-1 inline-flex items-center text-sm transition-colors">
+                        Research Datasets: Youth & Tech
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+
+        <!-- IPO Analysis View -->
+        <div id="view-ipo" class="space-y-8 animate-fade-in">
+            
+            <!-- Context Header -->
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+                <h1 class="text-2xl font-bold text-gray-900 mb-2">Defrail Technologies IPO Analysis</h1>
+                <p class="text-gray-600 leading-relaxed">
+                    You have requested RND (Research & Due Diligence) on <strong>Defrail Technologies</strong>. Note: Detailed public financial filings for a company specifically named "Defrail" are limited in major public aggregators. This analysis assumes a standard <strong>High-Growth Tech SME</strong> profile common to such listings. Since you have already bid, your focus should now shift to <strong>Allotment Probability</strong> and <strong>Listing Day Strategy</strong>.
+                </p>
+            </div>
+
+            <!-- Strategy Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                
+                <!-- RND Summary Card -->
+                <div class="lg:col-span-2 bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-4">Should We Invest? (RND Summary)</h2>
+                    <div class="space-y-4">
+                        <div class="flex items-start space-x-3">
+                            <div class="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center font-bold text-xs">✓</div>
+                            <div>
+                                <p class="font-medium text-gray-900">The "Buy" Case</p>
+                                <p class="text-sm text-gray-500">If Defrail operates in niche SaaS or AI-driven infrastructure, early-stage growth can be exponential (50-100% YoY). Tech IPOs in India currently enjoy a "scarcity premium".</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <div class="flex-shrink-0 w-6 h-6 rounded-full bg-red-100 text-red-600 flex items-center justify-center font-bold text-xs">!</div>
+                            <div>
+                                <p class="font-medium text-gray-900">The Risk Factors</p>
+                                <p class="text-sm text-gray-500">Micro-cap/SME liquidity is low. If the GMP (Grey Market Premium) is below 15%, the risk of opening at a discount is high. Look for "Object of Issue" – is it for debt repayment (bad) or expansion (good)?</p>
+                            </div>
+                        </div>
+                        <div class="bg-orange-50 p-4 rounded-lg border border-orange-100 mt-2">
+                            <p class="text-sm text-orange-800 font-medium">Verdict for Bidders:</p>
+                            <p class="text-sm text-orange-700">Since you have already bid, <strong>do not cancel</strong> unless GMP crashes below 5%. The primary goal now is "Listing Gains".</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Calculator Input -->
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-4">Listing Gain Calculator</h2>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-500 mb-1">Lot Size (Shares)</label>
+                            <input type="number" id="lotSize" value="100" class="w-full bg-gray-50 border border-gray-200 rounded p-2 text-sm focus:ring-2 focus:ring-orange-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-500 mb-1">Issue Price (₹)</label>
+                            <input type="number" id="issuePrice" value="150" class="w-full bg-gray-50 border border-gray-200 rounded p-2 text-sm focus:ring-2 focus:ring-orange-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-500 mb-1">Current GMP (₹)</label>
+                            <input type="number" id="gmpPrice" value="45" class="w-full bg-gray-50 border border-gray-200 rounded p-2 text-sm focus:ring-2 focus:ring-orange-500 outline-none">
+                            <p class="text-xs text-gray-400 mt-1">Check current GMP on investor forums.</p>
+                        </div>
+                        <button onclick="calculateGains()" class="w-full bg-gray-900 hover:bg-black text-white py-2 rounded-lg text-sm font-medium transition-colors">
+                            Calculate Profit
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visualization Area -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Result Card -->
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 flex flex-col justify-center items-center text-center">
+                    <h3 class="text-gray-500 text-sm uppercase tracking-wide font-semibold mb-2">Estimated Listing Gain</h3>
+                    <div class="text-4xl font-bold text-gray-900 mb-1" id="gainAmount">₹4,500</div>
+                    <div class="text-sm font-medium text-green-600 bg-green-50 px-3 py-1 rounded-full mb-6" id="gainPercent">+30.00%</div>
+                    
+                    <div class="w-full text-left bg-gray-50 p-4 rounded-lg">
+                        <p class="text-sm text-gray-600 mb-1"><strong>Strategy:</strong> <span id="strategyText">Hold for listing. Good gains expected.</span></p>
+                    </div>
+                </div>
+
+                <!-- Chart: Gain Breakdown -->
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+                    <h3 class="text-gray-500 text-sm uppercase tracking-wide font-semibold mb-4">Capital Deployment Visual</h3>
+                    <div class="chart-container">
+                        <canvas id="gainChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Plan Timeline -->
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+                <h2 class="text-lg font-semibold text-gray-800 mb-6">Next Steps (Post-Bid Guide)</h2>
+                <div class="relative">
+                    <div class="absolute left-4 top-0 h-full w-0.5 bg-gray-200"></div>
+                    <div class="space-y-8 pl-12 relative">
+                        <!-- Step 1 -->
+                        <div class="relative">
+                            <div class="absolute -left-[3.25rem] bg-orange-500 h-8 w-8 rounded-full flex items-center justify-center text-white font-bold text-sm">1</div>
+                            <h4 class="font-bold text-gray-900">Check Allotment Status</h4>
+                            <p class="text-sm text-gray-600 mt-1">Visit the Registrar's website (Link Intime, KFintech, or Bigshare). Usually available 2 days after bid closing.</p>
+                        </div>
+                        <!-- Step 2 -->
+                        <div class="relative">
+                            <div class="absolute -left-[3.25rem] bg-gray-900 h-8 w-8 rounded-full flex items-center justify-center text-white font-bold text-sm">2</div>
+                            <h4 class="font-bold text-gray-900">Listing Day (9:45 AM - 10:00 AM)</h4>
+                            <p class="text-sm text-gray-600 mt-1">If listed > 50% gain, sell 50% of holdings to recover capital. If listed flat, hold for 3-5 days to see volume price action.</p>
+                        </div>
+                        <!-- Step 3 -->
+                        <div class="relative">
+                            <div class="absolute -left-[3.25rem] bg-gray-300 h-8 w-8 rounded-full flex items-center justify-center text-white font-bold text-sm">3</div>
+                            <h4 class="font-bold text-gray-900">Long Term Decision</h4>
+                            <p class="text-sm text-gray-600 mt-1">Only hold long-term if quarterly results show >20% profit growth. Otherwise, treat as a listing gain play.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Research Datasets View -->
+        <div id="view-research" class="hidden space-y-8">
+            
+            <!-- Context Header -->
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+                <h1 class="text-2xl font-bold text-gray-900 mb-2">Research Resources: Youth, Tech & Mental Health</h1>
+                <p class="text-gray-600 leading-relaxed">
+                    You are looking for datasets regarding <strong>Smartphone Addiction</strong> and <strong>Depression</strong> in youth, with a focus on Indian demographics. Below is a curated list of search terms, repositories, and a visualization of the data structure you will likely encounter in these studies (often measured using PHQ-9 for depression and SAS-SV for addiction).
+                </p>
+            </div>
+
+            <!-- Resource Table -->
+            <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100">
+                <div class="px-6 py-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
+                    <h2 class="font-semibold text-gray-800">Dataset Vault (Kaggle, GitHub, & Open Data)</h2>
+                    <span class="text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded">Updated Jan 2026</span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left">
+                        <thead class="bg-gray-50 text-gray-500 font-medium border-b border-gray-100">
+                            <tr>
+                                <th class="px-6 py-3">Source / Platform</th>
+                                <th class="px-6 py-3">Search Query / Dataset Name</th>
+                                <th class="px-6 py-3">Relevance</th>
+                                <th class="px-6 py-3">Key Variables</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-6 py-4 font-medium text-blue-600">Kaggle</td>
+                                <td class="px-6 py-4">"Social Media Addiction and Mental Health"</td>
+                                <td class="px-6 py-4 text-gray-600">High (Contains specific depression scores)</td>
+                                <td class="px-6 py-4 text-gray-500">Age, Gender, Hours_Online, PHQ9_Score</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-6 py-4 font-medium text-blue-600">Kaggle / Mendeley</td>
+                                <td class="px-6 py-4">"Smartphone Addiction Scale (SAS-SV) Indian Youth"</td>
+                                <td class="px-6 py-4 text-gray-600">Very High (Indian Demographic)</td>
+                                <td class="px-6 py-4 text-gray-500">SAS_Score, Anxiety_Level, Region (India)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-6 py-4 font-medium text-gray-800">GitHub</td>
+                                <td class="px-6 py-4">"Mental-Health-Tech-Usage-Survey"</td>
+                                <td class="px-6 py-4 text-gray-600">Moderate (Raw CSV often available)</td>
+                                <td class="px-6 py-4 text-gray-500">Timestamp, Device_Type, Sleep_Hours, Mood</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-6 py-4 font-medium text-purple-600">Google Scholar</td>
+                                <td class="px-6 py-4">"Prevalence of nomophobia Indian students PDF"</td>
+                                <td class="px-6 py-4 text-gray-600">Research (Look for Appendix Tables)</td>
+                                <td class="px-6 py-4 text-gray-500">Survey Summary Tables (Manual Extraction)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Visualization of Trends -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Explainer -->
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-4">Analysis: What the Data Usually Shows</h2>
+                    <p class="text-sm text-gray-600 mb-4">
+                        When analyzing these datasets, you will typically perform a <strong>Correlation Analysis</strong>. The scatter plot on the right visualizes synthetic data representing a typical finding in Indian youth studies: a positive correlation between high screen time (>6 hours) and elevated PHQ-9 (Depression) scores.
+                    </p>
+                    <div class="space-y-2">
+                        <div class="p-3 bg-red-50 rounded border border-red-100">
+                            <p class="text-xs font-bold text-red-800">Danger Zone:</p>
+                            <p class="text-xs text-red-700">Adolescents with >7 hours screen time often show PHQ-9 scores > 15 (Moderately Severe Depression).</p>
+                        </div>
+                        <div class="p-3 bg-green-50 rounded border border-green-100">
+                            <p class="text-xs font-bold text-green-800">Safe Zone:</p>
+                            <p class="text-xs text-green-700">Screen time < 2 hours correlates with lower anxiety and better sleep quality.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Plotly Chart -->
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 flex flex-col">
+                    <h3 class="text-gray-500 text-sm uppercase tracking-wide font-semibold mb-2">Sample Correlation: Screen Time vs. PHQ-9</h3>
+                    <div class="chart-container flex-grow">
+                        <div id="scatterPlot" style="width:100%; height:100%;"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script>
+        // --- State Management ---
+        const state = {
+            activeTab: 'ipo',
+            ipo: {
+                lotSize: 100,
+                issuePrice: 150,
+                gmpPrice: 45
+            }
+        };
+
+        // --- Navigation Logic ---
+        function switchTab(tabName) {
+            state.activeTab = tabName;
+            
+            // Update UI
+            document.getElementById('view-ipo').classList.add('hidden');
+            document.getElementById('view-research').classList.add('hidden');
+            document.getElementById('view-' + tabName).classList.remove('hidden');
+
+            const btnIpo = document.getElementById('nav-ipo');
+            const btnRes = document.getElementById('nav-research');
+
+            if (tabName === 'ipo') {
+                btnIpo.className = 'tab-active h-16 px-1 inline-flex items-center text-sm transition-colors';
+                btnRes.className = 'tab-inactive h-16 px-1 inline-flex items-center text-sm transition-colors';
+            } else {
+                btnIpo.className = 'tab-inactive h-16 px-1 inline-flex items-center text-sm transition-colors';
+                btnRes.className = 'tab-active h-16 px-1 inline-flex items-center text-sm transition-colors';
+                renderScatterPlot(); // Render Plotly when tab becomes visible
+            }
+        }
+
+        // --- IPO Logic ---
+        let gainChartInstance = null;
+
+        function calculateGains() {
+            // Get values
+            const lot = parseFloat(document.getElementById('lotSize').value) || 0;
+            const issue = parseFloat(document.getElementById('issuePrice').value) || 0;
+            const gmp = parseFloat(document.getElementById('gmpPrice').value) || 0;
+
+            const investment = lot * issue;
+            const profit = lot * gmp;
+            const totalValue = investment + profit;
+            const percentGain = issue > 0 ? (profit / investment) * 100 : 0;
+
+            // Update DOM
+            document.getElementById('gainAmount').innerText = `₹${profit.toLocaleString('en-IN')}`;
+            const percentEl = document.getElementById('gainPercent');
+            percentEl.innerText = `+${percentGain.toFixed(2)}%`;
+
+            // Strategy Text Logic
+            const stratText = document.getElementById('strategyText');
+            if (percentGain > 50) {
+                stratText.innerText = "Excellent listing expected. Strategy: Sell 50% on listing to free up capital.";
+                percentEl.className = "text-sm font-medium text-green-700 bg-green-100 px-3 py-1 rounded-full mb-6";
+            } else if (percentGain > 20) {
+                stratText.innerText = "Moderate gains. Strategy: Hold with a trailing stop-loss.";
+                percentEl.className = "text-sm font-medium text-green-600 bg-green-50 px-3 py-1 rounded-full mb-6";
+            } else if (percentGain > 0) {
+                stratText.innerText = "Low premium. High risk of flat opening. Be cautious.";
+                percentEl.className = "text-sm font-medium text-orange-600 bg-orange-50 px-3 py-1 rounded-full mb-6";
+            } else {
+                stratText.innerText = "Negative sentiment. Risk of capital loss.";
+                percentEl.className = "text-sm font-medium text-red-600 bg-red-50 px-3 py-1 rounded-full mb-6";
+            }
+
+            // Update Chart
+            updateGainChart(investment, profit);
+        }
+
+        function updateGainChart(investment, profit) {
+            const ctx = document.getElementById('gainChart').getContext('2d');
+            
+            if (gainChartInstance) {
+                gainChartInstance.destroy();
+            }
+
+            gainChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Invested Capital', 'Expected Profit'],
+                    datasets: [{
+                        data: [investment, profit > 0 ? profit : 0],
+                        backgroundColor: ['#e5e7eb', '#ea580c'],
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return ' ₹' + context.raw.toLocaleString('en-IN');
+                                }
+                            }
+                        }
+                    },
+                    cutout: '70%'
+                }
+            });
+        }
+
+        // --- Research Data Visualization (Plotly) ---
+        let scatterRendered = false;
+
+        function renderScatterPlot() {
+            if (scatterRendered) return;
+
+            // Synthetic Data Generation (Simulating Indian Youth Survey Data)
+            const n = 100;
+            const screenTime = [];
+            const depressionScore = [];
+            const textLabels = [];
+
+            for (let i = 0; i < n; i++) {
+                // Generate screen time between 1 and 12 hours
+                const st = 1 + Math.random() * 11;
+                // Generate PHQ9 score correlated with screen time + random noise
+                // PHQ9: 0-4 (None), 5-9 (Mild), 10-14 (Moderate), 15-19 (Mod Severe), 20-27 (Severe)
+                let phq = (st * 1.8) + (Math.random() * 8 - 4);
+                if (phq < 0) phq = 0;
+                if (phq > 27) phq = 27;
+
+                screenTime.push(st);
+                depressionScore.push(phq);
+                textLabels.push(`User ${i+1}`);
+            }
+
+            const trace1 = {
+                x: screenTime,
+                y: depressionScore,
+                mode: 'markers',
+                type: 'scatter',
+                text: textLabels,
+                marker: { size: 10, color: '#ea580c', opacity: 0.6 }
+            };
+
+            const layout = {
+                title: { text: 'Correlation: Daily Screen Time vs. PHQ-9 Score', font: { size: 14 } },
+                xaxis: { title: 'Daily Screen Time (Hours)', range: [0, 13] },
+                yaxis: { title: 'Depression Score (PHQ-9)', range: [0, 28] },
+                margin: { t: 40, b: 40, l: 40, r: 20 },
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)'
+            };
+
+            const config = { responsive: true, displayModeBar: false };
+
+            Plotly.newPlot('scatterPlot', [trace1], layout, config);
+            scatterRendered = true;
+        }
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            calculateGains(); // Initial calculation
+            
+            // Add listeners to inputs
+            ['lotSize', 'issuePrice', 'gmpPrice'].forEach(id => {
+                document.getElementById(id).addEventListener('input', calculateGains);
+            });
+        });
+
+    </script>
+</body>
+</html>
