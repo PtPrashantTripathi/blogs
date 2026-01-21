@@ -1,6 +1,7 @@
 import os
 import subprocess
 from datetime import datetime
+import xml.dom.minidom as minidom
 from xml.etree.ElementTree import Element, SubElement, ElementTree
 
 ROOT = os.getcwd()
@@ -143,7 +144,17 @@ for post in posts:
     if post["date"]:
         SubElement(url, "lastmod").text = post["date"].strftime("%Y-%m-%d")
 
-ElementTree(urlset).write(SITEMAP_FILE, encoding="utf-8", xml_declaration=True)
+# ElementTree(urlset).write(SITEMAP_FILE, encoding="utf-8", xml_declaration=True)
+rough_tree = ElementTree(urlset)
+rough_string = minidom.parseString(
+    ElementTree.tostring(urlset, encoding="utf-8", xml_declaration=True)
+)
+
+pretty_xml = rough_string.toprettyxml(indent="\t", encoding="utf-8")
+
+with open(SITEMAP_FILE, "wb") as f:
+    f.write(pretty_xml)
+
 
 # -------------------------
 # Log GA injections
