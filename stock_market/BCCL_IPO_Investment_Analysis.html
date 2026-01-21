@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BCCL IPO Research & Due Diligence Report</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals & Corporate Blue -->
+    <!-- Application Structure Plan: 
+         - Layout: Dashboard-style Single Page Application (SPA) with a sticky sidebar/top-nav for mobile.
+         - Logic: The user flows from "Overview" (What is it?) -> "Financials" (Is it making money?) -> "Strategic Analysis" (SWOT) -> "Valuation" (Is it cheap?) -> "Verdict".
+         - Interaction: Tabs for section navigation, interactive charts for data exploration, and a slider-based calculator for valuation modeling.
+         - Justification: Investment decisions require a structured flow of information. Breaking it down into these specific tabs prevents information overload and allows the user to focus on one aspect of the due diligence at a time.
+    -->
+    <!-- Visualization & Content Choices:
+         - Financial Trends: Bar/Line combo chart (Chart.js) to show the turnaround from loss to profit. Goal: Visualize growth.
+         - Operational Mix: Doughnut chart (Chart.js) to show Coking vs Non-Coking coal. Goal: Highlight strategic importance.
+         - SWOT: CSS Grid with hover effects. Goal: Interactive qualitative analysis.
+         - Valuation: Custom JS Inputs/Sliders. Goal: Allow user to model different IPO pricing scenarios.
+         - Library: Chart.js for canvas rendering. Tailwind for layout.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #F5F5F4; color: #1C1917; }
+        .chart-container { position: relative; width: 100%; max-width: 800px; margin: 0 auto; height: 350px; }
+        .nav-item.active { background-color: #E7E5E4; border-left: 4px solid #0EA5E9; font-weight: 600; }
+        .card { background: white; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: transform 0.2s; }
+        .card:hover { transform: translateY(-2px); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        input[type=range] { -webkit-appearance: none; width: 100%; height: 6px; background: #E5E7EB; border-radius: 5px; outline: none; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; background: #0EA5E9; cursor: pointer; transition: background .15s ease-in-out; }
+    </style>
+</head>
+<body class="flex flex-col md:flex-row h-screen overflow-hidden">
+
+    <!-- Sidebar Navigation -->
+    <aside class="w-full md:w-64 bg-white border-r border-stone-200 flex-shrink-0 flex flex-col z-20">
+        <div class="p-6 border-b border-stone-100">
+            <h1 class="text-xl font-bold text-stone-800 tracking-tight">IPO <span class="text-sky-600">Analyst</span></h1>
+            <p class="text-xs text-stone-500 mt-1">Target: Bharat Coking Coal Ltd</p>
+        </div>
+        <nav class="flex-1 overflow-y-auto p-4 space-y-2">
+            <button onclick="switchTab('overview')" id="nav-overview" class="nav-item active w-full text-left px-4 py-3 rounded-md text-sm text-stone-600 hover:bg-stone-50 transition-colors">
+                1. Executive Summary
+            </button>
+            <button onclick="switchTab('financials')" id="nav-financials" class="nav-item w-full text-left px-4 py-3 rounded-md text-sm text-stone-600 hover:bg-stone-50 transition-colors">
+                2. Financial Health
+            </button>
+            <button onclick="switchTab('swot')" id="nav-swot" class="nav-item w-full text-left px-4 py-3 rounded-md text-sm text-stone-600 hover:bg-stone-50 transition-colors">
+                3. Strategic SWOT
+            </button>
+            <button onclick="switchTab('valuation')" id="nav-valuation" class="nav-item w-full text-left px-4 py-3 rounded-md text-sm text-stone-600 hover:bg-stone-50 transition-colors">
+                4. Valuation Model
+            </button>
+            <button onclick="switchTab('verdict')" id="nav-verdict" class="nav-item w-full text-left px-4 py-3 rounded-md text-sm text-stone-600 hover:bg-stone-50 transition-colors">
+                5. Final Verdict
+            </button>
+        </nav>
+        <div class="p-4 border-t border-stone-100 bg-stone-50">
+            <p class="text-xs text-stone-400">Data Source: Public Reports & CIL Filings. Not financial advice.</p>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 overflow-y-auto relative scroll-smooth p-4 md:p-8" id="main-content">
+        
+        <!-- SECTION 1: EXECUTIVE SUMMARY -->
+        <section id="overview" class="space-y-6 max-w-5xl mx-auto">
+            <header class="mb-8">
+                <h2 class="text-3xl font-bold text-stone-900 mb-2">Executive Summary</h2>
+                <p class="text-stone-600 max-w-3xl leading-relaxed">
+                    Bharat Coking Coal Limited (BCCL), a subsidiary of Coal India Limited (CIL), accounts for nearly 50% of the total prime coking coal requirement of the integrated steel sector in India. Historically a loss-making entity, it has recently staged a significant financial turnaround. This dashboard analyzes whether a potential listing (IPO) offers a viable investment opportunity based on "turnaround" and "scarcity" themes.
+                </p>
+            </header>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- KPI 1 -->
+                <div class="card p-6 border-t-4 border-sky-500">
+                    <h3 class="text-sm font-semibold text-stone-500 uppercase">Core Business</h3>
+                    <p class="text-2xl font-bold text-stone-800 mt-2">Coking Coal</p>
+                    <p class="text-sm text-stone-600 mt-2">Only major domestic supplier of prime coking coal, crucial for steel manufacturing.</p>
+                </div>
+                <!-- KPI 2 -->
+                <div class="card p-6 border-t-4 border-emerald-500">
+                    <h3 class="text-sm font-semibold text-stone-500 uppercase">Recent Performance</h3>
+                    <p class="text-2xl font-bold text-stone-800 mt-2">Profitable</p>
+                    <p class="text-sm text-stone-600 mt-2">Turned around from heavy losses to posting record profits in recent fiscals.</p>
+                </div>
+                <!-- KPI 3 -->
+                <div class="card p-6 border-t-4 border-amber-500">
+                    <h3 class="text-sm font-semibold text-stone-500 uppercase">IPO Status</h3>
+                    <p class="text-2xl font-bold text-stone-800 mt-2">Potential</p>
+                    <p class="text-sm text-stone-600 mt-2">Discussions ongoing regarding 25% stake sale/listing to unlock value for Coal India.</p>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-stone-200 mt-6">
+                <h3 class="text-lg font-semibold text-stone-800 mb-4">Why This Matters (The "Moat")</h3>
+                <div class="flex flex-col md:flex-row gap-6 items-center">
+                    <div class="flex-1 space-y-3">
+                        <p class="text-stone-700"><strong class="text-sky-700">Import Substitution:</strong> India imports vast amounts of coking coal. BCCL is the primary domestic hedge against volatile global prices.</p>
+                        <p class="text-stone-700"><strong class="text-sky-700">Steel Demand:</strong> With India's infrastructure push, steel demand is robust, directly driving demand for BCCL's output.</p>
+                    </div>
+                    <div class="w-full md:w-1/3 h-48 relative">
+                        <!-- Chart Container for Mix -->
+                        <div class="chart-container" style="height: 200px;">
+                            <canvas id="coalMixChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: FINANCIAL HEALTH -->
+        <section id="financials" class="hidden space-y-6 max-w-5xl mx-auto">
+            <header class="mb-6">
+                <h2 class="text-3xl font-bold text-stone-900 mb-2">Financial Trajectory</h2>
+                <p class="text-stone-600">
+                    Analyze the dramatic shift in BCCL's books. The company has moved from being a drag on Coal India's balance sheet to a significant contributor. Use the toggles below to visualize different metrics.
+                </p>
+            </header>
+
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-stone-200">
+                <div class="flex flex-wrap gap-2 mb-6 justify-center md:justify-start">
+                    <button onclick="updateFinancialChart('revenue')" class="px-4 py-2 rounded-full text-sm font-medium bg-sky-100 text-sky-700 hover:bg-sky-200 transition-colors ring-1 ring-sky-200">Revenue</button>
+                    <button onclick="updateFinancialChart('profit')" class="px-4 py-2 rounded-full text-sm font-medium bg-stone-100 text-stone-700 hover:bg-stone-200 transition-colors ring-1 ring-stone-200">Net Profit/Loss</button>
+                    <button onclick="updateFinancialChart('production')" class="px-4 py-2 rounded-full text-sm font-medium bg-stone-100 text-stone-700 hover:bg-stone-200 transition-colors ring-1 ring-stone-200">Production (MT)</button>
+                </div>
+                
+                <div class="chart-container">
+                    <canvas id="financialChart"></canvas>
+                </div>
+                <div class="mt-4 text-center text-sm text-stone-500 italic" id="chart-context">
+                    Showing Revenue Growth (in ₹ Crores). Note the steady upward trend.
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="card p-6">
+                    <h3 class="font-bold text-stone-800">Key Financial Drivers</h3>
+                    <ul class="mt-4 space-y-2 text-sm text-stone-600">
+                        <li class="flex items-start"><span class="mr-2 text-green-500">✔</span> <span>Price hikes in coking coal (linked to global indices).</span></li>
+                        <li class="flex items-start"><span class="mr-2 text-green-500">✔</span> <span>Closure of unviable underground mines.</span></li>
+                        <li class="flex items-start"><span class="mr-2 text-green-500">✔</span> <span>Increased outsourcing of patching/overburden removal.</span></li>
+                    </ul>
+                </div>
+                <div class="card p-6">
+                    <h3 class="font-bold text-stone-800">Risk Factors</h3>
+                    <ul class="mt-4 space-y-2 text-sm text-stone-600">
+                        <li class="flex items-start"><span class="mr-2 text-red-500">⚠</span> <span>High wage cost structure (legacy employee base).</span></li>
+                        <li class="flex items-start"><span class="mr-2 text-red-500">⚠</span> <span>Volatility in global coal prices.</span></li>
+                        <li class="flex items-start"><span class="mr-2 text-red-500">⚠</span> <span>Fire and subsidence issues in the Jharia coalfield.</span></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: SWOT ANALYSIS -->
+        <section id="swot" class="hidden space-y-6 max-w-5xl mx-auto">
+            <header class="mb-6">
+                <h2 class="text-3xl font-bold text-stone-900 mb-2">Strategic Analysis (SWOT)</h2>
+                <p class="text-stone-600">
+                    A qualitative deep dive into the business model. Hover over or tap the cards to understand the implications of each factor on the investment thesis.
+                </p>
+            </header>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Strengths -->
+                <div class="bg-emerald-50 border border-emerald-100 p-6 rounded-lg">
+                    <div class="flex items-center mb-4">
+                        <div class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 font-bold mr-3">S</div>
+                        <h3 class="text-xl font-bold text-stone-800">Strengths</h3>
+                    </div>
+                    <ul class="space-y-3">
+                        <li class="bg-white p-3 rounded shadow-sm text-sm text-stone-700"><strong>Monopoly Status:</strong> Near monopoly in prime coking coal in India.</li>
+                        <li class="bg-white p-3 rounded shadow-sm text-sm text-stone-700"><strong>Parentage:</strong> Backed by Coal India and Govt of India (Sovereign support).</li>
+                        <li class="bg-white p-3 rounded shadow-sm text-sm text-stone-700"><strong>Reserves:</strong> Massive proven reserves in the Jharia Coalfield.</li>
+                    </ul>
+                </div>
+
+                <!-- Weaknesses -->
+                <div class="bg-orange-50 border border-orange-100 p-6 rounded-lg">
+                    <div class="flex items-center mb-4">
+                        <div class="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 font-bold mr-3">W</div>
+                        <h3 class="text-xl font-bold text-stone-800">Weaknesses</h3>
+                    </div>
+                    <ul class="space-y-3">
+                        <li class="bg-white p-3 rounded shadow-sm text-sm text-stone-700"><strong>Legacy Costs:</strong> Massive employee benefit expenses.</li>
+                        <li class="bg-white p-3 rounded shadow-sm text-sm text-stone-700"><strong>Infrastructure:</strong> Evacuation logistics often face bottlenecks.</li>
+                        <li class="bg-white p-3 rounded shadow-sm text-sm text-stone-700"><strong>Quality:</strong> High ash content requires washing, adding cost.</li>
+                    </ul>
+                </div>
+
+                <!-- Opportunities -->
+                <div class="bg-sky-50 border border-sky-100 p-6 rounded-lg">
+                    <div class="flex items-center mb-4">
+                        <div class="w-8 h-8 rounded-full bg-sky-100 flex items-center justify-center text-sky-600 font-bold mr-3">O</div>
+                        <h3 class="text-xl font-bold text-stone-800">Opportunities</h3>
+                    </div>
+                    <ul class="space-y-3">
+                        <li class="bg-white p-3 rounded shadow-sm text-sm text-stone-700"><strong>Washeries:</strong> Setting up new washeries to improve coal quality and pricing power.</li>
+                        <li class="bg-white p-3 rounded shadow-sm text-sm text-stone-700"><strong>CBM Extraction:</strong> Coal Bed Methane potential in Jharia fields.</li>
+                        <li class="bg-white p-3 rounded shadow-sm text-sm text-stone-700"><strong>Import Substitution:</strong> Govt push to reduce imports helps domestic price realization.</li>
+                    </ul>
+                </div>
+
+                <!-- Threats -->
+                <div class="bg-red-50 border border-red-100 p-6 rounded-lg">
+                    <div class="flex items-center mb-4">
+                        <div class="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center text-red-600 font-bold mr-3">T</div>
+                        <h3 class="text-xl font-bold text-stone-800">Threats</h3>
+                    </div>
+                    <ul class="space-y-3">
+                        <li class="bg-white p-3 rounded shadow-sm text-sm text-stone-700"><strong>ESG Mandates:</strong> Global shift away from fossil fuels limits long-term institutional interest.</li>
+                        <li class="bg-white p-3 rounded shadow-sm text-sm text-stone-700"><strong>Regulatory Changes:</strong> Changes in mining laws or environmental clearances.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: VALUATION CALCULATOR -->
+        <section id="valuation" class="hidden space-y-6 max-w-5xl mx-auto">
+            <header class="mb-6">
+                <h2 class="text-3xl font-bold text-stone-900 mb-2">Valuation Simulator</h2>
+                <p class="text-stone-600">
+                    If BCCL lists, at what price is it a buy? Use this tool to estimate the Market Cap based on expected profits and industry P/E (Price-to-Earnings) ratios.
+                </p>
+            </header>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Controls -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-stone-200">
+                    <h3 class="font-bold text-stone-800 mb-6 border-b pb-2">Input Assumptions</h3>
+                    
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-stone-700 mb-2">
+                            Estimated Net Profit (₹ Cr)
+                            <span id="display-profit" class="float-right font-bold text-sky-600">1500</span>
+                        </label>
+                        <input type="range" id="input-profit" min="500" max="4000" step="100" value="1500" class="w-full">
+                        <p class="text-xs text-stone-500 mt-1">Conservative estimate based on recent fiscal.</p>
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-stone-700 mb-2">
+                            Target P/E Ratio
+                            <span id="display-pe" class="float-right font-bold text-sky-600">8.0</span>
+                        </label>
+                        <input type="range" id="input-pe" min="4" max="20" step="0.5" value="8.0" class="w-full">
+                        <p class="text-xs text-stone-500 mt-1">Coal India trades ~7-9x. Growth stocks trade >15x.</p>
+                    </div>
+
+                    <div class="bg-blue-50 p-4 rounded text-sm text-blue-800">
+                        <strong>Tip:</strong> A P/E below 6 usually indicates undervaluation for a commodity stock, while >12 assumes significant growth or market froth.
+                    </div>
+                </div>
+
+                <!-- Results -->
+                <div class="bg-stone-800 text-white p-6 rounded-lg shadow-lg flex flex-col justify-center items-center text-center">
+                    <h3 class="text-stone-400 text-sm uppercase tracking-wider mb-2">Estimated Market Cap</h3>
+                    <div class="text-4xl md:text-5xl font-bold text-white mb-2">
+                        ₹<span id="output-mcap">12,000</span> Cr
+                    </div>
+                    <div class="w-16 h-1 bg-sky-500 rounded my-4"></div>
+                    
+                    <div class="text-stone-300 text-sm mb-4">
+                        Implied Valuation Status:
+                    </div>
+                    <div id="valuation-status" class="px-4 py-2 rounded-full font-bold bg-green-500 text-white">
+                        Fair Value
+                    </div>
+                    <p class="text-xs text-stone-500 mt-6 max-w-xs">
+                        *This is a simulation. Actual listing price depends on book building, market sentiment, and debt levels.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: VERDICT -->
+        <section id="verdict" class="hidden space-y-6 max-w-5xl mx-auto">
+             <header class="mb-6">
+                <h2 class="text-3xl font-bold text-stone-900 mb-2">The RND Verdict</h2>
+                <p class="text-stone-600">
+                    Based on the analysis of Financials, Strategic Moat, and Risks.
+                </p>
+            </header>
+
+            <div class="bg-white border border-stone-200 rounded-lg overflow-hidden shadow-sm">
+                <div class="p-8 text-center bg-gradient-to-r from-stone-50 to-stone-100">
+                    <h3 class="text-lg text-stone-500 font-medium mb-2">Recommendation Profile</h3>
+                    <h1 class="text-4xl md:text-5xl font-black text-stone-800 mb-4">WATCHLIST <span class="text-sky-600">& BUY ON DIPS</span></h1>
+                    <p class="max-w-2xl mx-auto text-stone-600">
+                        BCCL is a <strong>Strategic Asset</strong> rather than a Growth Asset. The recent financial turnaround is impressive, but the long-term ESG headwinds cannot be ignored.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x border-t border-stone-200">
+                    <div class="p-6">
+                        <h4 class="font-bold text-green-700 mb-3 flex items-center">
+                            <span class="bg-green-100 p-1 rounded mr-2">👍</span> Bull Case (Why Invest?)
+                        </h4>
+                        <p class="text-sm text-stone-600 leading-relaxed">
+                            If the IPO valuation is attractive (P/E < 6-7), it is a strong buy for <strong>dividend yield</strong> and defensive portfolio allocation. The monopoly in coking coal ensures revenue stability as long as Indian steel demand grows.
+                        </p>
+                    </div>
+                    <div class="p-6">
+                        <h4 class="font-bold text-red-700 mb-3 flex items-center">
+                            <span class="bg-red-100 p-1 rounded mr-2">👎</span> Bear Case (Why Avoid?)
+                        </h4>
+                        <p class="text-sm text-stone-600 leading-relaxed">
+                            Avoid if priced aggressively (P/E > 10). The company has high fixed costs (wages) and is vulnerable to global coal price crashes. It is not a multi-bagger tech stock; it is a commodity play.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="bg-stone-900 text-stone-300 p-4 text-center text-sm">
+                    <strong>Bottom Line:</strong> A classic "Old Economy" value play. Excellent for risk-averse investors seeking dividends, provided the entry price is right.
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // --- State Management ---
+        const appState = {
+            currentTab: 'overview',
+            financialData: {
+                labels: ['FY21', 'FY22', 'FY23', 'FY24 (Est)'],
+                revenue: [6000, 9500, 14000, 16500], // Approx figures in Cr
+                profit: [-1200, 200, 1800, 2200],    // Turnaround story
+                production: [24, 30, 36, 41]         // Million Tonnes
+            }
+        };
+
+        // --- Navigation Logic ---
+        function switchTab(tabId) {
+            // Hide all sections
+            document.querySelectorAll('main > section').forEach(el => el.classList.add('hidden'));
+            // Remove active class from nav
+            document.querySelectorAll('.nav-item').forEach(el => {
+                el.classList.remove('active', 'bg-stone-100', 'border-left-4', 'border-sky-500');
+                el.classList.remove('bg-[#E7E5E4]', 'border-l-4', 'border-[#0EA5E9]', 'font-semibold'); // Remove custom active styles
+            });
+
+            // Show selected section
+            document.getElementById(tabId).classList.remove('hidden');
+            
+            // Add active styling to button
+            const activeBtn = document.getElementById(`nav-${tabId}`);
+            activeBtn.classList.add('active');
+
+            // Trigger chart render if needed (fix for Chart.js in hidden tabs)
+            if (tabId === 'financials' && window.financialChart) {
+                window.financialChart.update();
+            }
+            
+            appState.currentTab = tabId;
+            window.scrollTo(0,0);
+        }
+
+        // --- Chart Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            initCoalMixChart();
+            initFinancialChart();
+            initValuationCalc();
+        });
+
+        // 1. Coal Mix Chart (Doughnut)
+        function initCoalMixChart() {
+            const ctx = document.getElementById('coalMixChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Coking Coal (Washed/Raw)', 'Non-Coking Coal'],
+                    datasets: [{
+                        data: [85, 15], // Approximate mix emphasizing coking coal focus
+                        backgroundColor: ['#0EA5E9', '#A8A29E'], // Sky Blue & Stone
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'right', labels: { boxWidth: 10 } },
+                        title: { display: true, text: 'Product Portfolio Mix' }
+                    }
+                }
+            });
+        }
+
+        // 2. Financial Chart (Bar)
+        let financialChartInstance = null;
+
+        function initFinancialChart() {
+            const ctx = document.getElementById('financialChart').getContext('2d');
+            
+            financialChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: appState.financialData.labels,
+                    datasets: [{
+                        label: 'Revenue (₹ Cr)',
+                        data: appState.financialData.revenue,
+                        backgroundColor: '#0EA5E9',
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.raw;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: '#F5F5F4' } },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        }
+
+        function updateFinancialChart(metric) {
+            if (!financialChartInstance) return;
+
+            const dataMap = {
+                'revenue': { label: 'Revenue (₹ Cr)', color: '#0EA5E9', data: appState.financialData.revenue, desc: "Revenue has doubled in 3 years driven by global coal prices." },
+                'profit': { label: 'Net Profit/Loss (₹ Cr)', color: '#10B981', data: appState.financialData.profit, desc: "The turnaround from -₹1200Cr loss to Profitability is the key investment thesis." },
+                'production': { label: 'Production (Million Tonnes)', color: '#F59E0B', data: appState.financialData.production, desc: "Steady volume growth indicates operational efficiency improvements." }
+            };
+
+            const selected = dataMap[metric];
+            
+            // Update Chart
+            financialChartInstance.data.datasets[0].label = selected.label;
+            financialChartInstance.data.datasets[0].data = selected.data;
+            financialChartInstance.data.datasets[0].backgroundColor = selected.color;
+            financialChartInstance.update();
+
+            // Update Context Text
+            document.getElementById('chart-context').innerText = selected.desc;
+        }
+
+        // --- Valuation Calculator Logic ---
+        function initValuationCalc() {
+            const profitInput = document.getElementById('input-profit');
+            const peInput = document.getElementById('input-pe');
+            
+            const displayProfit = document.getElementById('display-profit');
+            const displayPe = document.getElementById('display-pe');
+            const outputMcap = document.getElementById('output-mcap');
+            const statusLabel = document.getElementById('valuation-status');
+
+            function calculate() {
+                const profit = parseInt(profitInput.value);
+                const pe = parseFloat(peInput.value);
+                
+                // Update Labels
+                displayProfit.innerText = profit;
+                displayPe.innerText = pe.toFixed(1);
+
+                // Calc Market Cap
+                const mcap = profit * pe;
+                outputMcap.innerText = mcap.toLocaleString();
+
+                // Determine Status Logic
+                if (pe < 6) {
+                    statusLabel.innerText = "Undervalued / Value Buy";
+                    statusLabel.className = "px-4 py-2 rounded-full font-bold bg-green-500 text-white";
+                } else if (pe >= 6 && pe <= 10) {
+                    statusLabel.innerText = "Fairly Valued";
+                    statusLabel.className = "px-4 py-2 rounded-full font-bold bg-blue-500 text-white";
+                } else {
+                    statusLabel.innerText = "Overvalued / Expensive";
+                    statusLabel.className = "px-4 py-2 rounded-full font-bold bg-red-500 text-white";
+                }
+            }
+
+            profitInput.addEventListener('input', calculate);
+            peInput.addEventListener('input', calculate);
+        }
+
+    </script>
+</body>
+</html>

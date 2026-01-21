@@ -1,23 +1,39 @@
 import os
 import subprocess
 from datetime import datetime
+from xml.etree.ElementTree import Element, SubElement, ElementTree
 
 ROOT = os.getcwd()
-OUTPUT_FILE = os.path.join(ROOT, "index.html")
+BASE_URL = "https://ptprashanttripathi.github.io/blogs/"
+GA_ID = "G-C4NJD8J3MD"
+
+INDEX_FILE = os.path.join(ROOT, "index.html")
+SITEMAP_FILE = os.path.join(ROOT, "sitemap.xml")
+
+GA_SNIPPET = f"""
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id={GA_ID}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){{dataLayer.push(arguments);}}
+  gtag('js', new Date());
+  gtag('config', '{GA_ID}');
+</script>
+"""
 
 
 def find_html_files():
     html_files = []
-    for root, dirs, files in os.walk(ROOT):
+    for root, _, files in os.walk(ROOT):
         if ".git" in root:
             continue
-        for file in files:
-            if file.endswith(".html") and file != "index.html":
-                html_files.append(os.path.join(root, file))
+        for f in files:
+            if f.endswith(".html") and f != "index.html":
+                html_files.append(os.path.join(root, f))
     return html_files
 
 
-def get_creation_date(filepath):
+def git_created_date(filepath):
     try:
         result = subprocess.check_output(
             [
@@ -37,10 +53,33 @@ def get_creation_date(filepath):
         return None
 
 
+def inject_ga_if_missing(filepath):
+    with open(filepath, "r", encoding="utf-8", errors="ignore") as f:
+        content = f.read()
+
+    if GA_ID in content:
+        return False
+
+    if "</head>" not in content:
+        return False
+
+    content = content.replace("</head>",  GA_SNIPPET + "\n</head>", 1)
+
+    with open(filepath, "w", encoding="utf-8") as f:
+        f.write(content)
+
+    return True
+
+
 posts = []
+ga_injected = []
 
 for file in find_html_files():
     rel_path = os.path.relpath(file, ROOT).replace("\\", "/")
+
+    if inject_ga_if_missing(file):
+        ga_injected.append(rel_path)
+
     title = (
         os.path.splitext(os.path.basename(file))[0]
         .replace("-", " ")
@@ -48,52 +87,72 @@ for file in find_html_files():
         .title()
     )
 
-    created_at = get_creation_date(file)
     posts.append(
         {
             "title": title,
             "path": rel_path,
-            "date": created_at,
+            "date": git_created_date(file),
         }
     )
 
-# Sort newest first
 posts.sort(key=lambda x: x["date"] or datetime.min, reverse=True)
 
-# Generate HTML
-html = f"""<!DOCTYPE html>
+# -------------------------
+# Generate index.html
+# -------------------------
+html = """<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>My Blog</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <title>Blogs</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 text-gray-800">
-  <div class="max-w-4xl mx-auto py-10 px-4">
-    <h1 class="text-4xl font-bold mb-6">📚 Blog</h1>
-
+<body class="bg-gray-100">
+  <main class="max-w-4xl mx-auto p-6">
+    <h1 class="text-4xl font-bold mb-6">📚 Blogs</h1>
     <div class="space-y-4">
 """
 
 for post in posts:
     date_str = post["date"].strftime("%d %b %Y") if post["date"] else "Unknown"
     html += f"""
-      <a href="{post['path']}"
-         class="block p-5 bg-white rounded-xl shadow hover:shadow-md transition">
+      <a href="{post['path']}" class="block bg-white p-5 rounded-xl shadow hover:shadow-lg transition">
         <h2 class="text-2xl font-semibold">{post['title']}</h2>
-        <p class="text-sm text-gray-500 mt-1">Posted on {date_str}</p>
-      </a>
-"""
+        <p class="text-gray-500 text-sm mt-1">Posted on {date_str}</p>
+      </a>"""
 
 html += """
     </div>
-  </div>
+  </main>
 </body>
 </html>
 """
 
-with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
+with open(INDEX_FILE, "w", encoding="utf-8") as f:
     f.write(html)
 
-print("index.html generated successfully.")
+# -------------------------
+# Generate sitemap.xml
+# -------------------------
+urlset = Element("urlset", xmlns="http://www.sitemaps.org/schemas/sitemap/0.9")
+
+for post in posts:
+    url = SubElement(urlset, "url")
+    SubElement(url, "loc").text = BASE_URL + post["path"]
+    if post["date"]:
+        SubElement(url, "lastmod").text = post["date"].strftime("%Y-%m-%d")
+
+ElementTree(urlset).write(SITEMAP_FILE, encoding="utf-8", xml_declaration=True)
+
+# -------------------------
+# Log GA injections
+# -------------------------
+if ga_injected:
+    print("\n✅ Google Tag injected into:")
+    for f in ga_injected:
+        print(f" - {f}")
+else:
+    print("\n✅ Google Tag already present in all files")
+
+print("\n✅ index.html & sitemap.xml generated")
