@@ -2,7 +2,7 @@ import os
 import subprocess
 from datetime import datetime
 import xml.dom.minidom as minidom
-from xml.etree.ElementTree import Element, SubElement, ElementTree
+from xml.etree.ElementTree import Element, SubElement, ElementTree, tostring
 
 ROOT = os.getcwd()
 BASE_URL = "https://ptprashanttripathi.github.io/blogs/"
@@ -147,7 +147,7 @@ for post in posts:
 # ElementTree(urlset).write(SITEMAP_FILE, encoding="utf-8", xml_declaration=True)
 rough_tree = ElementTree(urlset)
 rough_string = minidom.parseString(
-    ElementTree.tostring(urlset, encoding="utf-8", xml_declaration=True)
+    tostring(urlset, encoding="utf-8", xml_declaration=True)
 )
 
 pretty_xml = rough_string.toprettyxml(indent="\t", encoding="utf-8")
