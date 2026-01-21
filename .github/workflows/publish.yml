@@ -1,10 +1,8 @@
-name: Generate Index & Publish Pages
+name: Generate Index, Fix GA & Publish Pages
 
 on:
-  workflow_dispatch:
   push:
-    branches:
-      - main
+    branches: [main]
 
 permissions:
   contents: write
@@ -19,22 +17,35 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # IMPORTANT for git history
+          fetch-depth: 0
 
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - name: Generate index.html
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Format HTML with Prettier (pre)
+        run: |
+          npx prettier --write "**/*.html"
+
+      - name: Generate index, sitemap & inject GA
         run: python scripts/generate_index.py
 
-      - name: Commit index.html
+      - name: Format HTML with Prettier (post)
+        run: |
+          npx prettier --write "**/*.html"
+
+      - name: Commit generated files
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git add index.html
-          git diff --cached --quiet || git commit -m "Auto-generate index.html"
+          git add .
+          git diff --cached --quiet || git commit -m "Auto: inject GA, format HTML, update index & sitemap"
 
       - name: Push changes
         uses: ad-m/github-push-action@v0.8.0
@@ -51,9 +62,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
       - name: Deploy to GitHub Pages
-        id: deployment
         uses: actions/deploy-pages@v4
