@@ -1,64 +1,81 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NSE/BSE Futures Analysis: Top Picks Jan 2026</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Vibrant "Electric Future" Palette: Indigo, Cyan, Pink, Amber -->
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            dark: '#1e1b4b',   // Indigo 950
-                            primary: '#6366f1', // Indigo 500
-                            secondary: '#06b6d4', // Cyan 500
-                            accent: '#ec4899',  // Pink 500
-                            warning: '#f59e0b', // Amber 500
-                            success: '#10b981', // Emerald 500
-                            bg: '#f8fafc'       // Slate 50
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    }
-                }
-            }
-        }
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                dark: "#1e1b4b", // Indigo 950
+                primary: "#6366f1", // Indigo 500
+                secondary: "#06b6d4", // Cyan 500
+                accent: "#ec4899", // Pink 500
+                warning: "#f59e0b", // Amber 500
+                success: "#10b981", // Emerald 500
+                bg: "#f8fafc", // Slate 50
+              },
+            },
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+            },
+          },
+        },
+      };
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
-        
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #1e293b; }
-        
-        .chart-container {
-            position: relative;
-            width: 100%;
-            max-width: 100%;
-            margin: 0 auto;
-            height: 350px;
-            max-height: 400px;
-        }
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap");
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; }
-        ::-webkit-scrollbar-thumb { background: #6366f1; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #4f46e5; }
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #f8fafc;
+        color: #1e293b;
+      }
 
-        /* Card Hover Effects */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .glass-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
+      .chart-container {
+        position: relative;
+        width: 100%;
+        max-width: 100%;
+        margin: 0 auto;
+        height: 350px;
+        max-height: 400px;
+      }
+
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #6366f1;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #4f46e5;
+      }
+
+      /* Card Hover Effects */
+      .glass-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        transition:
+          transform 0.3s ease,
+          box-shadow 0.3s ease;
+      }
+      .glass-card:hover {
+        transform: translateY(-5px);
+        box-shadow:
+          0 20px 25px -5px rgba(0, 0, 0, 0.1),
+          0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      }
     </style>
     <!-- 
     Palette Name: Electric Future
@@ -66,501 +83,776 @@
     Goal: High Contrast, Modern Financial Analytics
     NO SVG USED. NO MERMAID USED.
     -->
-</head>
-<body class="bg-brand-bg">
 
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-C4NJD8J3MD"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-C4NJD8J3MD");
+    </script>
+  </head>
+  <body class="bg-brand-bg">
     <!-- Navbar -->
-    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-gray-200 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center">
-                <div class="flex items-center gap-2">
-                    <div class="h-8 w-8 bg-brand-primary rounded-lg flex items-center justify-center text-white font-bold text-xl">F</div>
-                    <span class="font-bold text-xl tracking-tight text-gray-900">Futures<span class="text-brand-primary">Radar</span> 2026</span>
-                </div>
-                <div class="hidden md:flex space-x-8 text-sm font-medium text-gray-500">
-                    <a href="#market-view" class="hover:text-brand-primary transition">Market View</a>
-                    <a href="#top-picks" class="hover:text-brand-primary transition">Top Picks</a>
-                    <a href="#technical-analysis" class="hover:text-brand-primary transition">Technical Analysis</a>
-                    <a href="#risk-reward" class="hover:text-brand-primary transition">Risk Profile</a>
-                </div>
+    <nav
+      class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-gray-200 shadow-sm"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16 items-center">
+          <div class="flex items-center gap-2">
+            <div
+              class="h-8 w-8 bg-brand-primary rounded-lg flex items-center justify-center text-white font-bold text-xl"
+            >
+              F
             </div>
+            <span class="font-bold text-xl tracking-tight text-gray-900"
+              >Futures<span class="text-brand-primary">Radar</span> 2026</span
+            >
+          </div>
+          <div
+            class="hidden md:flex space-x-8 text-sm font-medium text-gray-500"
+          >
+            <a href="#market-view" class="hover:text-brand-primary transition"
+              >Market View</a
+            >
+            <a href="#top-picks" class="hover:text-brand-primary transition"
+              >Top Picks</a
+            >
+            <a
+              href="#technical-analysis"
+              class="hover:text-brand-primary transition"
+              >Technical Analysis</a
+            >
+            <a href="#risk-reward" class="hover:text-brand-primary transition"
+              >Risk Profile</a
+            >
+          </div>
         </div>
+      </div>
     </nav>
 
     <!-- Hero Section -->
-    <header class="bg-brand-dark text-white pt-16 pb-24 relative overflow-hidden">
-        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#6366f1_1px,transparent_1px)] [background-size:16px_16px]"></div>
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="text-center max-w-3xl mx-auto">
-                <span class="inline-block py-1 px-3 rounded-full bg-brand-primary/20 text-brand-secondary text-xs font-bold tracking-wider mb-4 border border-brand-primary/30">JANUARY 2026 EDITION</span>
-                <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-6 leading-tight">
-                    High Probability <br/> <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-secondary to-brand-accent">Futures Opportunities</span>
-                </h1>
-                <p class="text-lg text-gray-300 mb-8">
-                    A deep dive into the NSE & BSE's most promising technical setups and fundamental stories. Backed by quarterly earnings momentum and institutional accumulation.
-                </p>
-                <div class="flex justify-center gap-4">
-                    <div class="bg-white/10 backdrop-blur border border-white/20 rounded-xl p-4 text-center min-w-[120px]">
-                        <div class="text-2xl font-bold text-brand-secondary">NIFTY 50</div>
-                        <div class="text-sm text-gray-400">Bullish Bias</div>
-                    </div>
-                    <div class="bg-white/10 backdrop-blur border border-white/20 rounded-xl p-4 text-center min-w-[120px]">
-                        <div class="text-2xl font-bold text-brand-accent">IV Rank</div>
-                        <div class="text-sm text-gray-400">Moderate</div>
-                    </div>
-                </div>
+    <header
+      class="bg-brand-dark text-white pt-16 pb-24 relative overflow-hidden"
+    >
+      <div
+        class="absolute inset-0 opacity-10 bg-[radial-gradient(#6366f1_1px,transparent_1px)] [background-size:16px_16px]"
+      ></div>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="text-center max-w-3xl mx-auto">
+          <span
+            class="inline-block py-1 px-3 rounded-full bg-brand-primary/20 text-brand-secondary text-xs font-bold tracking-wider mb-4 border border-brand-primary/30"
+            >JANUARY 2026 EDITION</span
+          >
+          <h1
+            class="text-4xl md:text-6xl font-extrabold tracking-tight mb-6 leading-tight"
+          >
+            High Probability <br />
+            <span
+              class="text-transparent bg-clip-text bg-gradient-to-r from-brand-secondary to-brand-accent"
+              >Futures Opportunities</span
+            >
+          </h1>
+          <p class="text-lg text-gray-300 mb-8">
+            A deep dive into the NSE & BSE's most promising technical setups and
+            fundamental stories. Backed by quarterly earnings momentum and
+            institutional accumulation.
+          </p>
+          <div class="flex justify-center gap-4">
+            <div
+              class="bg-white/10 backdrop-blur border border-white/20 rounded-xl p-4 text-center min-w-[120px]"
+            >
+              <div class="text-2xl font-bold text-brand-secondary">
+                NIFTY 50
+              </div>
+              <div class="text-sm text-gray-400">Bullish Bias</div>
             </div>
+            <div
+              class="bg-white/10 backdrop-blur border border-white/20 rounded-xl p-4 text-center min-w-[120px]"
+            >
+              <div class="text-2xl font-bold text-brand-accent">IV Rank</div>
+              <div class="text-sm text-gray-400">Moderate</div>
+            </div>
+          </div>
         </div>
+      </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-16 relative z-20 pb-20">
-        
-        <!-- Section 1: Strategic Overview -->
-        <section id="market-view" class="mb-16">
-            <div class="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
-                <h2 class="text-2xl font-bold text-gray-900 mb-4 border-l-4 border-brand-primary pl-4">Market Context: The 2026 Landscape</h2>
-                <p class="text-gray-600 mb-6 leading-relaxed">
-                    As we enter January 2026, the Indian equity markets are displaying resilience driven by domestic institutional flows and renewed foreign interest. The focus has shifted from high-beta small caps to <strong>large-cap stability</strong> with visible earnings growth. The current futures strategy favors stocks with established uptrends, strong "Buy on Dip" structures, and robust quarterly numbers. We are prioritizing <strong>Banking, Infrastructure, and Telecom</strong> sectors.
-                </p>
-                
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <!-- Key Metric 1 -->
-                    <div class="p-6 bg-blue-50 rounded-xl border border-blue-100">
-                        <div class="text-brand-primary text-4xl font-bold mb-1">14.2%</div>
-                        <div class="text-gray-900 font-semibold">Avg Earnings Growth</div>
-                        <div class="text-sm text-gray-500 mt-2">Top 5 Picks (YoY)</div>
-                    </div>
-                    <!-- Key Metric 2 -->
-                    <div class="p-6 bg-cyan-50 rounded-xl border border-cyan-100">
-                        <div class="text-brand-secondary text-4xl font-bold mb-1">1.8x</div>
-                        <div class="text-gray-900 font-semibold">Reward-to-Risk</div>
-                        <div class="text-sm text-gray-500 mt-2">Minimum Threshold</div>
-                    </div>
-                    <!-- Key Metric 3 -->
-                    <div class="p-6 bg-pink-50 rounded-xl border border-pink-100">
-                        <div class="text-brand-accent text-4xl font-bold mb-1">High</div>
-                        <div class="text-gray-900 font-semibold">Liquidity Score</div>
-                        <div class="text-sm text-gray-500 mt-2">Suitable for Futures</div>
-                    </div>
-                </div>
+    <main
+      class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-16 relative z-20 pb-20"
+    >
+      <!-- Section 1: Strategic Overview -->
+      <section id="market-view" class="mb-16">
+        <div class="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+          <h2
+            class="text-2xl font-bold text-gray-900 mb-4 border-l-4 border-brand-primary pl-4"
+          >
+            Market Context: The 2026 Landscape
+          </h2>
+          <p class="text-gray-600 mb-6 leading-relaxed">
+            As we enter January 2026, the Indian equity markets are displaying
+            resilience driven by domestic institutional flows and renewed
+            foreign interest. The focus has shifted from high-beta small caps to
+            <strong>large-cap stability</strong> with visible earnings growth.
+            The current futures strategy favors stocks with established
+            uptrends, strong "Buy on Dip" structures, and robust quarterly
+            numbers. We are prioritizing
+            <strong>Banking, Infrastructure, and Telecom</strong> sectors.
+          </p>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Key Metric 1 -->
+            <div class="p-6 bg-blue-50 rounded-xl border border-blue-100">
+              <div class="text-brand-primary text-4xl font-bold mb-1">
+                14.2%
+              </div>
+              <div class="text-gray-900 font-semibold">Avg Earnings Growth</div>
+              <div class="text-sm text-gray-500 mt-2">Top 5 Picks (YoY)</div>
             </div>
-        </section>
-
-        <!-- Section 2: Top Picks Table -->
-        <section id="top-picks" class="mb-16">
-            <div class="mb-8">
-                <h2 class="text-3xl font-bold text-gray-900">Alpha Generators: Top 5 Picks</h2>
-                <p class="text-gray-500 mt-2">Selected based on technical breakouts overlapping with fundamental strength.</p>
+            <!-- Key Metric 2 -->
+            <div class="p-6 bg-cyan-50 rounded-xl border border-cyan-100">
+              <div class="text-brand-secondary text-4xl font-bold mb-1">
+                1.8x
+              </div>
+              <div class="text-gray-900 font-semibold">Reward-to-Risk</div>
+              <div class="text-sm text-gray-500 mt-2">Minimum Threshold</div>
             </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-1 gap-8">
-                <div class="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200">
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
-                            <thead>
-                                <tr class="bg-gray-50 border-b border-gray-200 text-xs uppercase tracking-wider text-gray-500">
-                                    <th class="p-6 font-bold">Stock</th>
-                                    <th class="p-6 font-bold">Sector</th>
-                                    <th class="p-6 font-bold">CMP (₹)</th>
-                                    <th class="p-6 font-bold text-brand-success">Target (₹)</th>
-                                    <th class="p-6 font-bold text-brand-accent">Stop Loss (₹)</th>
-                                    <th class="p-6 font-bold">Rationale</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-100 text-sm">
-                                <tr class="hover:bg-gray-50 transition">
-                                    <td class="p-6 font-bold text-gray-900 flex items-center gap-3">
-                                        <div class="h-8 w-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 font-bold">I</div>
-                                        ICICI Bank
-                                    </td>
-                                    <td class="p-6 text-gray-600">Banking</td>
-                                    <td class="p-6 font-mono">1,245</td>
-                                    <td class="p-6 font-mono font-bold text-brand-success">1,380 - 1,420</td>
-                                    <td class="p-6 font-mono text-brand-accent">1,190</td>
-                                    <td class="p-6 text-gray-500 max-w-xs">Flag breakout on weekly charts; consistent 18% ROE.</td>
-                                </tr>
-                                <tr class="hover:bg-gray-50 transition">
-                                    <td class="p-6 font-bold text-gray-900 flex items-center gap-3">
-                                        <div class="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">L</div>
-                                        L&T
-                                    </td>
-                                    <td class="p-6 text-gray-600">Infra</td>
-                                    <td class="p-6 font-mono">3,850</td>
-                                    <td class="p-6 font-mono font-bold text-brand-success">4,200 - 4,350</td>
-                                    <td class="p-6 font-mono text-brand-accent">3,680</td>
-                                    <td class="p-6 text-gray-500 max-w-xs">Order book at record highs; Ascending Triangle breakout.</td>
-                                </tr>
-                                <tr class="hover:bg-gray-50 transition">
-                                    <td class="p-6 font-bold text-gray-900 flex items-center gap-3">
-                                        <div class="h-8 w-8 rounded-full bg-cyan-100 flex items-center justify-center text-cyan-600 font-bold">I</div>
-                                        Infosys
-                                    </td>
-                                    <td class="p-6 text-gray-600">IT Services</td>
-                                    <td class="p-6 font-mono">1,920</td>
-                                    <td class="p-6 font-mono font-bold text-brand-success">2,100 - 2,150</td>
-                                    <td class="p-6 font-mono text-brand-accent">1,840</td>
-                                    <td class="p-6 text-gray-500 max-w-xs">Fed rate cut optimism; Inverse Head & Shoulders pattern.</td>
-                                </tr>
-                                <tr class="hover:bg-gray-50 transition">
-                                    <td class="p-6 font-bold text-gray-900 flex items-center gap-3">
-                                        <div class="h-8 w-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold">T</div>
-                                        Tata Motors
-                                    </td>
-                                    <td class="p-6 text-gray-600">Auto</td>
-                                    <td class="p-6 font-mono">1,150</td>
-                                    <td class="p-6 font-mono font-bold text-brand-success">1,300 - 1,340</td>
-                                    <td class="p-6 font-mono text-brand-accent">1,080</td>
-                                    <td class="p-6 text-gray-500 max-w-xs">JLR margin expansion; EV leadership consolidation.</td>
-                                </tr>
-                                <tr class="hover:bg-gray-50 transition">
-                                    <td class="p-6 font-bold text-gray-900 flex items-center gap-3">
-                                        <div class="h-8 w-8 rounded-full bg-red-100 flex items-center justify-center text-red-600 font-bold">B</div>
-                                        Bharti Airtel
-                                    </td>
-                                    <td class="p-6 text-gray-600">Telecom</td>
-                                    <td class="p-6 font-mono">1,680</td>
-                                    <td class="p-6 font-mono font-bold text-brand-success">1,850 - 1,900</td>
-                                    <td class="p-6 font-mono text-brand-accent">1,590</td>
-                                    <td class="p-6 text-gray-500 max-w-xs">ARPU growth trajectory; multi-year breakout retest.</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+            <!-- Key Metric 3 -->
+            <div class="p-6 bg-pink-50 rounded-xl border border-pink-100">
+              <div class="text-brand-accent text-4xl font-bold mb-1">High</div>
+              <div class="text-gray-900 font-semibold">Liquidity Score</div>
+              <div class="text-sm text-gray-500 mt-2">Suitable for Futures</div>
             </div>
-        </section>
+          </div>
+        </div>
+      </section>
 
-        <!-- Section 3: Deep Dive Visuals -->
-        <section id="technical-analysis" class="mb-16">
-            <h2 class="text-2xl font-bold text-gray-900 mb-6">Deep Technical & Fundamental Divergence</h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                
-                <!-- Chart 1: Valuation Matrix -->
-                <div class="glass-card rounded-2xl p-6 border border-gray-100 shadow-lg flex flex-col">
-                    <div class="mb-4">
-                        <h3 class="text-lg font-bold text-gray-800">Growth vs. Valuation Matrix</h3>
-                        <p class="text-xs text-gray-500">Bubble Size = Market Cap Weight. Identifying GARP (Growth at Reasonable Price).</p>
-                    </div>
-                    <div class="chart-container flex-grow">
-                        <canvas id="valuationBubbleChart"></canvas>
-                    </div>
-                    <div class="mt-4 text-sm text-gray-600 italic border-t border-gray-100 pt-3">
-                        <span class="font-bold text-brand-secondary">Insight:</span> ICICI Bank shows the best balance of high growth (16%) and moderate P/E (22x), suggesting undervaluation relative to growth.
-                    </div>
-                </div>
+      <!-- Section 2: Top Picks Table -->
+      <section id="top-picks" class="mb-16">
+        <div class="mb-8">
+          <h2 class="text-3xl font-bold text-gray-900">
+            Alpha Generators: Top 5 Picks
+          </h2>
+          <p class="text-gray-500 mt-2">
+            Selected based on technical breakouts overlapping with fundamental
+            strength.
+          </p>
+        </div>
 
-                <!-- Chart 2: Technical Radar -->
-                <div class="glass-card rounded-2xl p-6 border border-gray-100 shadow-lg flex flex-col">
-                    <div class="mb-4">
-                        <h3 class="text-lg font-bold text-gray-800">Technical Strength Meter</h3>
-                        <p class="text-xs text-gray-500">Multivariate analysis of momentum, trend, and volume signals.</p>
-                    </div>
-                    <div class="chart-container flex-grow">
-                        <canvas id="technicalRadarChart"></canvas>
-                    </div>
-                    <div class="mt-4 text-sm text-gray-600 italic border-t border-gray-100 pt-3">
-                        <span class="font-bold text-brand-primary">Insight:</span> L&T scores highest on "Trend Strength" and "Volume Support," indicating a strong institutional backing for the current rally.
-                    </div>
-                </div>
-
-                <!-- Chart 3: Relative Performance -->
-                <div class="glass-card rounded-2xl p-6 border border-gray-100 shadow-lg flex flex-col md:col-span-2">
-                    <div class="mb-4">
-                        <h3 class="text-lg font-bold text-gray-800">90-Day Relative Price Performance</h3>
-                        <p class="text-xs text-gray-500">Normalized percentage return from October 2025 baseline.</p>
-                    </div>
-                    <div class="chart-container" style="height: 400px; max-height: 400px;">
-                        <canvas id="performanceLineChart"></canvas>
-                    </div>
-                    <div class="mt-4 text-sm text-gray-600 italic border-t border-gray-100 pt-3">
-                        <span class="font-bold text-brand-accent">Insight:</span> Infosys has shown a sharp reversal trend in the last 30 days, outperforming the Nifty Index, confirming sector rotation into IT.
-                    </div>
-                </div>
-
+        <div class="grid grid-cols-1 lg:grid-cols-1 gap-8">
+          <div
+            class="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200"
+          >
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse">
+                <thead>
+                  <tr
+                    class="bg-gray-50 border-b border-gray-200 text-xs uppercase tracking-wider text-gray-500"
+                  >
+                    <th class="p-6 font-bold">Stock</th>
+                    <th class="p-6 font-bold">Sector</th>
+                    <th class="p-6 font-bold">CMP (₹)</th>
+                    <th class="p-6 font-bold text-brand-success">Target (₹)</th>
+                    <th class="p-6 font-bold text-brand-accent">
+                      Stop Loss (₹)
+                    </th>
+                    <th class="p-6 font-bold">Rationale</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100 text-sm">
+                  <tr class="hover:bg-gray-50 transition">
+                    <td
+                      class="p-6 font-bold text-gray-900 flex items-center gap-3"
+                    >
+                      <div
+                        class="h-8 w-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 font-bold"
+                      >
+                        I
+                      </div>
+                      ICICI Bank
+                    </td>
+                    <td class="p-6 text-gray-600">Banking</td>
+                    <td class="p-6 font-mono">1,245</td>
+                    <td class="p-6 font-mono font-bold text-brand-success">
+                      1,380 - 1,420
+                    </td>
+                    <td class="p-6 font-mono text-brand-accent">1,190</td>
+                    <td class="p-6 text-gray-500 max-w-xs">
+                      Flag breakout on weekly charts; consistent 18% ROE.
+                    </td>
+                  </tr>
+                  <tr class="hover:bg-gray-50 transition">
+                    <td
+                      class="p-6 font-bold text-gray-900 flex items-center gap-3"
+                    >
+                      <div
+                        class="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold"
+                      >
+                        L
+                      </div>
+                      L&T
+                    </td>
+                    <td class="p-6 text-gray-600">Infra</td>
+                    <td class="p-6 font-mono">3,850</td>
+                    <td class="p-6 font-mono font-bold text-brand-success">
+                      4,200 - 4,350
+                    </td>
+                    <td class="p-6 font-mono text-brand-accent">3,680</td>
+                    <td class="p-6 text-gray-500 max-w-xs">
+                      Order book at record highs; Ascending Triangle breakout.
+                    </td>
+                  </tr>
+                  <tr class="hover:bg-gray-50 transition">
+                    <td
+                      class="p-6 font-bold text-gray-900 flex items-center gap-3"
+                    >
+                      <div
+                        class="h-8 w-8 rounded-full bg-cyan-100 flex items-center justify-center text-cyan-600 font-bold"
+                      >
+                        I
+                      </div>
+                      Infosys
+                    </td>
+                    <td class="p-6 text-gray-600">IT Services</td>
+                    <td class="p-6 font-mono">1,920</td>
+                    <td class="p-6 font-mono font-bold text-brand-success">
+                      2,100 - 2,150
+                    </td>
+                    <td class="p-6 font-mono text-brand-accent">1,840</td>
+                    <td class="p-6 text-gray-500 max-w-xs">
+                      Fed rate cut optimism; Inverse Head & Shoulders pattern.
+                    </td>
+                  </tr>
+                  <tr class="hover:bg-gray-50 transition">
+                    <td
+                      class="p-6 font-bold text-gray-900 flex items-center gap-3"
+                    >
+                      <div
+                        class="h-8 w-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold"
+                      >
+                        T
+                      </div>
+                      Tata Motors
+                    </td>
+                    <td class="p-6 text-gray-600">Auto</td>
+                    <td class="p-6 font-mono">1,150</td>
+                    <td class="p-6 font-mono font-bold text-brand-success">
+                      1,300 - 1,340
+                    </td>
+                    <td class="p-6 font-mono text-brand-accent">1,080</td>
+                    <td class="p-6 text-gray-500 max-w-xs">
+                      JLR margin expansion; EV leadership consolidation.
+                    </td>
+                  </tr>
+                  <tr class="hover:bg-gray-50 transition">
+                    <td
+                      class="p-6 font-bold text-gray-900 flex items-center gap-3"
+                    >
+                      <div
+                        class="h-8 w-8 rounded-full bg-red-100 flex items-center justify-center text-red-600 font-bold"
+                      >
+                        B
+                      </div>
+                      Bharti Airtel
+                    </td>
+                    <td class="p-6 text-gray-600">Telecom</td>
+                    <td class="p-6 font-mono">1,680</td>
+                    <td class="p-6 font-mono font-bold text-brand-success">
+                      1,850 - 1,900
+                    </td>
+                    <td class="p-6 font-mono text-brand-accent">1,590</td>
+                    <td class="p-6 text-gray-500 max-w-xs">
+                      ARPU growth trajectory; multi-year breakout retest.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
-        </section>
+          </div>
+        </div>
+      </section>
 
-        <!-- Section 4: Risk Management -->
-        <section id="risk-reward" class="mb-24">
-            <h2 class="text-2xl font-bold text-gray-900 mb-6">Risk Assessment & Trade Logic</h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Chart 4: Risk/Reward -->
-                <div class="glass-card rounded-2xl p-6 border border-gray-100 shadow-lg md:col-span-2">
-                    <div class="mb-4">
-                        <h3 class="text-lg font-bold text-gray-800">Risk vs. Reward Potential</h3>
-                        <p class="text-xs text-gray-500">Upside potential relative to stop-loss risk.</p>
-                    </div>
-                    <div class="chart-container">
-                        <canvas id="riskRewardChart"></canvas>
-                    </div>
-                </div>
+      <!-- Section 3: Deep Dive Visuals -->
+      <section id="technical-analysis" class="mb-16">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">
+          Deep Technical & Fundamental Divergence
+        </h2>
 
-                <!-- Risk Text Content -->
-                <div class="flex flex-col gap-4">
-                    <div class="bg-white p-6 rounded-xl border-l-4 border-brand-accent shadow-sm">
-                        <h4 class="font-bold text-gray-900 mb-2">Stop Loss Discipline</h4>
-                        <p class="text-sm text-gray-600">Futures leverage requires strict adherence to stop losses. The levels provided are based on key support zones (20 DMA or Swing Lows). A breach invalidates the thesis.</p>
-                    </div>
-                    <div class="bg-white p-6 rounded-xl border-l-4 border-brand-warning shadow-sm">
-                        <h4 class="font-bold text-gray-900 mb-2">Volatility Watch</h4>
-                        <p class="text-sm text-gray-600">Earnings season volatility is high. Position sizing should be reduced by 30% if entering trades 2 days prior to quarterly result announcements.</p>
-                    </div>
-                    <div class="bg-white p-6 rounded-xl border-l-4 border-brand-secondary shadow-sm">
-                        <h4 class="font-bold text-gray-900 mb-2">Sector Tailwinds</h4>
-                        <p class="text-sm text-gray-600">Capital Goods and Banking remain the safest bets due to domestic capex stories, shielding them from global recessionary fears.</p>
-                    </div>
-                </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <!-- Chart 1: Valuation Matrix -->
+          <div
+            class="glass-card rounded-2xl p-6 border border-gray-100 shadow-lg flex flex-col"
+          >
+            <div class="mb-4">
+              <h3 class="text-lg font-bold text-gray-800">
+                Growth vs. Valuation Matrix
+              </h3>
+              <p class="text-xs text-gray-500">
+                Bubble Size = Market Cap Weight. Identifying GARP (Growth at
+                Reasonable Price).
+              </p>
             </div>
-        </section>
-
-        <!-- Footer -->
-        <footer class="bg-brand-dark text-white py-12 border-t border-gray-800">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center">
-                <div class="mb-4 md:mb-0">
-                    <div class="text-2xl font-bold tracking-tight">Futures<span class="text-brand-primary">Radar</span></div>
-                    <div class="text-gray-400 text-sm mt-1">Data driven insights for the modern trader.</div>
-                </div>
-                <div class="text-gray-500 text-xs text-center md:text-right max-w-md">
-                    <p>Disclaimer: This analysis is for educational purposes only. Futures trading involves substantial risk of loss and is not suitable for every investor. All price targets and stop losses are technical estimates based on Jan 2026 data.</p>
-                </div>
+            <div class="chart-container flex-grow">
+              <canvas id="valuationBubbleChart"></canvas>
             </div>
-        </footer>
+            <div
+              class="mt-4 text-sm text-gray-600 italic border-t border-gray-100 pt-3"
+            >
+              <span class="font-bold text-brand-secondary">Insight:</span> ICICI
+              Bank shows the best balance of high growth (16%) and moderate P/E
+              (22x), suggesting undervaluation relative to growth.
+            </div>
+          </div>
 
+          <!-- Chart 2: Technical Radar -->
+          <div
+            class="glass-card rounded-2xl p-6 border border-gray-100 shadow-lg flex flex-col"
+          >
+            <div class="mb-4">
+              <h3 class="text-lg font-bold text-gray-800">
+                Technical Strength Meter
+              </h3>
+              <p class="text-xs text-gray-500">
+                Multivariate analysis of momentum, trend, and volume signals.
+              </p>
+            </div>
+            <div class="chart-container flex-grow">
+              <canvas id="technicalRadarChart"></canvas>
+            </div>
+            <div
+              class="mt-4 text-sm text-gray-600 italic border-t border-gray-100 pt-3"
+            >
+              <span class="font-bold text-brand-primary">Insight:</span> L&T
+              scores highest on "Trend Strength" and "Volume Support,"
+              indicating a strong institutional backing for the current rally.
+            </div>
+          </div>
+
+          <!-- Chart 3: Relative Performance -->
+          <div
+            class="glass-card rounded-2xl p-6 border border-gray-100 shadow-lg flex flex-col md:col-span-2"
+          >
+            <div class="mb-4">
+              <h3 class="text-lg font-bold text-gray-800">
+                90-Day Relative Price Performance
+              </h3>
+              <p class="text-xs text-gray-500">
+                Normalized percentage return from October 2025 baseline.
+              </p>
+            </div>
+            <div
+              class="chart-container"
+              style="height: 400px; max-height: 400px"
+            >
+              <canvas id="performanceLineChart"></canvas>
+            </div>
+            <div
+              class="mt-4 text-sm text-gray-600 italic border-t border-gray-100 pt-3"
+            >
+              <span class="font-bold text-brand-accent">Insight:</span> Infosys
+              has shown a sharp reversal trend in the last 30 days,
+              outperforming the Nifty Index, confirming sector rotation into IT.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Risk Management -->
+      <section id="risk-reward" class="mb-24">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">
+          Risk Assessment & Trade Logic
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <!-- Chart 4: Risk/Reward -->
+          <div
+            class="glass-card rounded-2xl p-6 border border-gray-100 shadow-lg md:col-span-2"
+          >
+            <div class="mb-4">
+              <h3 class="text-lg font-bold text-gray-800">
+                Risk vs. Reward Potential
+              </h3>
+              <p class="text-xs text-gray-500">
+                Upside potential relative to stop-loss risk.
+              </p>
+            </div>
+            <div class="chart-container">
+              <canvas id="riskRewardChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Risk Text Content -->
+          <div class="flex flex-col gap-4">
+            <div
+              class="bg-white p-6 rounded-xl border-l-4 border-brand-accent shadow-sm"
+            >
+              <h4 class="font-bold text-gray-900 mb-2">Stop Loss Discipline</h4>
+              <p class="text-sm text-gray-600">
+                Futures leverage requires strict adherence to stop losses. The
+                levels provided are based on key support zones (20 DMA or Swing
+                Lows). A breach invalidates the thesis.
+              </p>
+            </div>
+            <div
+              class="bg-white p-6 rounded-xl border-l-4 border-brand-warning shadow-sm"
+            >
+              <h4 class="font-bold text-gray-900 mb-2">Volatility Watch</h4>
+              <p class="text-sm text-gray-600">
+                Earnings season volatility is high. Position sizing should be
+                reduced by 30% if entering trades 2 days prior to quarterly
+                result announcements.
+              </p>
+            </div>
+            <div
+              class="bg-white p-6 rounded-xl border-l-4 border-brand-secondary shadow-sm"
+            >
+              <h4 class="font-bold text-gray-900 mb-2">Sector Tailwinds</h4>
+              <p class="text-sm text-gray-600">
+                Capital Goods and Banking remain the safest bets due to domestic
+                capex stories, shielding them from global recessionary fears.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="bg-brand-dark text-white py-12 border-t border-gray-800">
+        <div
+          class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center"
+        >
+          <div class="mb-4 md:mb-0">
+            <div class="text-2xl font-bold tracking-tight">
+              Futures<span class="text-brand-primary">Radar</span>
+            </div>
+            <div class="text-gray-400 text-sm mt-1">
+              Data driven insights for the modern trader.
+            </div>
+          </div>
+          <div class="text-gray-500 text-xs text-center md:text-right max-w-md">
+            <p>
+              Disclaimer: This analysis is for educational purposes only.
+              Futures trading involves substantial risk of loss and is not
+              suitable for every investor. All price targets and stop losses are
+              technical estimates based on Jan 2026 data.
+            </p>
+          </div>
+        </div>
+      </footer>
     </main>
 
     <!-- Chart Logic -->
     <script>
-        // --- UTILITY: Wrap Labels for Chart.js ---
-        function wrapLabel(str, maxChars) {
-            if (str.length <= maxChars) return str;
-            const words = str.split(' ');
-            const lines = [];
-            let currentLine = words[0];
+      // --- UTILITY: Wrap Labels for Chart.js ---
+      function wrapLabel(str, maxChars) {
+        if (str.length <= maxChars) return str;
+        const words = str.split(" ");
+        const lines = [];
+        let currentLine = words[0];
 
-            for (let i = 1; i < words.length; i++) {
-                if (currentLine.length + 1 + words[i].length <= maxChars) {
-                    currentLine += ' ' + words[i];
-                } else {
-                    lines.push(currentLine);
-                    currentLine = words[i];
-                }
-            }
+        for (let i = 1; i < words.length; i++) {
+          if (currentLine.length + 1 + words[i].length <= maxChars) {
+            currentLine += " " + words[i];
+          } else {
             lines.push(currentLine);
-            return lines;
+            currentLine = words[i];
+          }
         }
+        lines.push(currentLine);
+        return lines;
+      }
 
-        // --- UTILITY: Common Tooltip Config ---
-        const commonTooltip = {
-            callbacks: {
-                title: function(tooltipItems) {
-                    const item = tooltipItems[0];
-                    let label = item.chart.data.labels[item.dataIndex];
-                    if (Array.isArray(label)) {
-                        return label.join(' ');
-                    } else {
-                        return label;
-                    }
-                }
-            },
-            backgroundColor: 'rgba(30, 27, 75, 0.9)', // brand-dark
-            titleFont: { family: 'Inter', size: 14 },
-            bodyFont: { family: 'Inter', size: 13 },
-            padding: 12,
-            cornerRadius: 8,
-            displayColors: true
-        };
-
-        // --- CHART 1: Valuation Bubble (Growth vs PE) ---
-        const ctxValuation = document.getElementById('valuationBubbleChart').getContext('2d');
-        new Chart(ctxValuation, {
-            type: 'bubble',
-            data: {
-                datasets: [
-                    { label: 'ICICI Bank', data: [{ x: 16, y: 22, r: 25 }], backgroundColor: '#6366f1' },
-                    { label: 'L&T', data: [{ x: 12, y: 35, r: 22 }], backgroundColor: '#06b6d4' },
-                    { label: 'Infosys', data: [{ x: 8, y: 26, r: 28 }], backgroundColor: '#ec4899' },
-                    { label: 'Tata Motors', data: [{ x: 10, y: 18, r: 20 }], backgroundColor: '#f59e0b' },
-                    { label: 'Bharti Airtel', data: [{ x: 14, y: 65, r: 24 }], backgroundColor: '#10b981' }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    x: { 
-                        title: { display: true, text: 'Revenue Growth (YoY %)', color: '#64748b' },
-                        grid: { color: '#f1f5f9' },
-                        min: 0, max: 20
-                    },
-                    y: { 
-                        title: { display: true, text: 'P/E Ratio (TTM)', color: '#64748b' },
-                        grid: { color: '#f1f5f9' },
-                        min: 0, max: 80
-                    }
-                },
-                plugins: {
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return `${context.dataset.label}: Growth ${context.raw.x}%, P/E ${context.raw.y}x`;
-                            }
-                        },
-                        ...commonTooltip
-                    },
-                    legend: { position: 'bottom', labels: { boxWidth: 12, font: { family: 'Inter' } } }
-                }
+      // --- UTILITY: Common Tooltip Config ---
+      const commonTooltip = {
+        callbacks: {
+          title: function (tooltipItems) {
+            const item = tooltipItems[0];
+            let label = item.chart.data.labels[item.dataIndex];
+            if (Array.isArray(label)) {
+              return label.join(" ");
+            } else {
+              return label;
             }
-        });
+          },
+        },
+        backgroundColor: "rgba(30, 27, 75, 0.9)", // brand-dark
+        titleFont: { family: "Inter", size: 14 },
+        bodyFont: { family: "Inter", size: 13 },
+        padding: 12,
+        cornerRadius: 8,
+        displayColors: true,
+      };
 
-        // --- CHART 2: Technical Radar ---
-        const ctxRadar = document.getElementById('technicalRadarChart').getContext('2d');
-        new Chart(ctxRadar, {
-            type: 'radar',
-            data: {
-                labels: ['RSI Momentum', 'Trend Strength', 'Volume Intensity', 'Supp. Proximity', 'Rel. Strength'],
-                datasets: [
-                    {
-                        label: 'L&T',
-                        data: [85, 90, 80, 75, 88],
-                        backgroundColor: 'rgba(6, 182, 212, 0.2)', // Cyan transparent
-                        borderColor: '#06b6d4',
-                        pointBackgroundColor: '#06b6d4',
-                        borderWidth: 2
-                    },
-                    {
-                        label: 'Infosys',
-                        data: [70, 65, 85, 90, 75],
-                        backgroundColor: 'rgba(236, 72, 153, 0.2)', // Pink transparent
-                        borderColor: '#ec4899',
-                        pointBackgroundColor: '#ec4899',
-                        borderWidth: 2
-                    }
-                ]
+      // --- CHART 1: Valuation Bubble (Growth vs PE) ---
+      const ctxValuation = document
+        .getElementById("valuationBubbleChart")
+        .getContext("2d");
+      new Chart(ctxValuation, {
+        type: "bubble",
+        data: {
+          datasets: [
+            {
+              label: "ICICI Bank",
+              data: [{ x: 16, y: 22, r: 25 }],
+              backgroundColor: "#6366f1",
             },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    r: {
-                        angleLines: { color: '#e2e8f0' },
-                        grid: { color: '#e2e8f0' },
-                        pointLabels: { font: { family: 'Inter', size: 11 }, color: '#475569' },
-                        ticks: { display: false }
-                    }
-                },
-                plugins: {
-                    tooltip: commonTooltip,
-                    legend: { position: 'top', labels: { font: { family: 'Inter' } } }
-                }
-            }
-        });
-
-        // --- CHART 3: Performance Line (Normalized) ---
-        // Simulating data points for last 3 months
-        const labelsLine = ['Oct W1', 'Oct W3', 'Nov W1', 'Nov W3', 'Dec W1', 'Dec W3', 'Jan W1', 'Jan Current'];
-        const ctxLine = document.getElementById('performanceLineChart').getContext('2d');
-        new Chart(ctxLine, {
-            type: 'line',
-            data: {
-                labels: labelsLine,
-                datasets: [
-                    {
-                        label: 'ICICI Bank',
-                        data: [0, 2, 4, 3, 6, 8, 10, 12],
-                        borderColor: '#6366f1',
-                        backgroundColor: '#6366f1',
-                        tension: 0.4,
-                        borderWidth: 2,
-                        pointRadius: 3
-                    },
-                    {
-                        label: 'Infosys',
-                        data: [0, -2, -3, 1, 4, 7, 11, 15],
-                        borderColor: '#ec4899', // Pink
-                        backgroundColor: '#ec4899',
-                        tension: 0.4,
-                        borderWidth: 2,
-                        pointRadius: 3
-                    },
-                    {
-                        label: 'Nifty 50 (Index)',
-                        data: [0, 1, 2, 2, 3, 4, 5, 6],
-                        borderColor: '#94a3b8', // Slate 400
-                        backgroundColor: '#94a3b8',
-                        borderDash: [5, 5],
-                        tension: 0.4,
-                        borderWidth: 2,
-                        pointRadius: 0
-                    }
-                ]
+            {
+              label: "L&T",
+              data: [{ x: 12, y: 35, r: 22 }],
+              backgroundColor: "#06b6d4",
             },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                interaction: { mode: 'index', intersect: false },
-                scales: {
-                    x: { grid: { display: false }, ticks: { color: '#64748b', font: { family: 'Inter' } } },
-                    y: { 
-                        grid: { color: '#f1f5f9' }, 
-                        ticks: { callback: function(value) { return value + '%'; }, color: '#64748b' } 
-                    }
-                },
-                plugins: {
-                    tooltip: commonTooltip,
-                    legend: { position: 'top', labels: { usePointStyle: true, boxWidth: 8 } }
-                }
-            }
-        });
-
-        // --- CHART 4: Risk/Reward Bar ---
-        const labelsBar = ['ICICI Bank', 'L&T', 'Infosys', 'Tata Motors', 'Bharti Airtel'];
-        const ctxBar = document.getElementById('riskRewardChart').getContext('2d');
-        
-        // Processing Labels for Wrap
-        const processedLabelsBar = labelsBar.map(l => wrapLabel(l, 16));
-
-        new Chart(ctxBar, {
-            type: 'bar',
-            data: {
-                labels: processedLabelsBar,
-                datasets: [
-                    {
-                        label: 'Upside Potential (%)',
-                        data: [12, 11, 10, 14, 11],
-                        backgroundColor: '#10b981', // Emerald
-                        borderRadius: 4
-                    },
-                    {
-                        label: 'Downside Risk (%)',
-                        data: [4.5, 4.2, 4.0, 5.5, 5.0],
-                        backgroundColor: '#ef4444', // Red
-                        borderRadius: 4
-                    }
-                ]
+            {
+              label: "Infosys",
+              data: [{ x: 8, y: 26, r: 28 }],
+              backgroundColor: "#ec4899",
             },
-            options: {
-                indexAxis: 'y',
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    x: { 
-                        grid: { color: '#f1f5f9' },
-                        ticks: { color: '#64748b' } 
-                    },
-                    y: { 
-                        grid: { display: false },
-                        ticks: { color: '#334155', font: { weight: 'bold' } } 
-                    }
+            {
+              label: "Tata Motors",
+              data: [{ x: 10, y: 18, r: 20 }],
+              backgroundColor: "#f59e0b",
+            },
+            {
+              label: "Bharti Airtel",
+              data: [{ x: 14, y: 65, r: 24 }],
+              backgroundColor: "#10b981",
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: {
+              title: {
+                display: true,
+                text: "Revenue Growth (YoY %)",
+                color: "#64748b",
+              },
+              grid: { color: "#f1f5f9" },
+              min: 0,
+              max: 20,
+            },
+            y: {
+              title: {
+                display: true,
+                text: "P/E Ratio (TTM)",
+                color: "#64748b",
+              },
+              grid: { color: "#f1f5f9" },
+              min: 0,
+              max: 80,
+            },
+          },
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: function (context) {
+                  return `${context.dataset.label}: Growth ${context.raw.x}%, P/E ${context.raw.y}x`;
                 },
-                plugins: {
-                    tooltip: commonTooltip,
-                    legend: { position: 'bottom' }
-                }
-            }
-        });
+              },
+              ...commonTooltip,
+            },
+            legend: {
+              position: "bottom",
+              labels: { boxWidth: 12, font: { family: "Inter" } },
+            },
+          },
+        },
+      });
 
+      // --- CHART 2: Technical Radar ---
+      const ctxRadar = document
+        .getElementById("technicalRadarChart")
+        .getContext("2d");
+      new Chart(ctxRadar, {
+        type: "radar",
+        data: {
+          labels: [
+            "RSI Momentum",
+            "Trend Strength",
+            "Volume Intensity",
+            "Supp. Proximity",
+            "Rel. Strength",
+          ],
+          datasets: [
+            {
+              label: "L&T",
+              data: [85, 90, 80, 75, 88],
+              backgroundColor: "rgba(6, 182, 212, 0.2)", // Cyan transparent
+              borderColor: "#06b6d4",
+              pointBackgroundColor: "#06b6d4",
+              borderWidth: 2,
+            },
+            {
+              label: "Infosys",
+              data: [70, 65, 85, 90, 75],
+              backgroundColor: "rgba(236, 72, 153, 0.2)", // Pink transparent
+              borderColor: "#ec4899",
+              pointBackgroundColor: "#ec4899",
+              borderWidth: 2,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            r: {
+              angleLines: { color: "#e2e8f0" },
+              grid: { color: "#e2e8f0" },
+              pointLabels: {
+                font: { family: "Inter", size: 11 },
+                color: "#475569",
+              },
+              ticks: { display: false },
+            },
+          },
+          plugins: {
+            tooltip: commonTooltip,
+            legend: { position: "top", labels: { font: { family: "Inter" } } },
+          },
+        },
+      });
+
+      // --- CHART 3: Performance Line (Normalized) ---
+      // Simulating data points for last 3 months
+      const labelsLine = [
+        "Oct W1",
+        "Oct W3",
+        "Nov W1",
+        "Nov W3",
+        "Dec W1",
+        "Dec W3",
+        "Jan W1",
+        "Jan Current",
+      ];
+      const ctxLine = document
+        .getElementById("performanceLineChart")
+        .getContext("2d");
+      new Chart(ctxLine, {
+        type: "line",
+        data: {
+          labels: labelsLine,
+          datasets: [
+            {
+              label: "ICICI Bank",
+              data: [0, 2, 4, 3, 6, 8, 10, 12],
+              borderColor: "#6366f1",
+              backgroundColor: "#6366f1",
+              tension: 0.4,
+              borderWidth: 2,
+              pointRadius: 3,
+            },
+            {
+              label: "Infosys",
+              data: [0, -2, -3, 1, 4, 7, 11, 15],
+              borderColor: "#ec4899", // Pink
+              backgroundColor: "#ec4899",
+              tension: 0.4,
+              borderWidth: 2,
+              pointRadius: 3,
+            },
+            {
+              label: "Nifty 50 (Index)",
+              data: [0, 1, 2, 2, 3, 4, 5, 6],
+              borderColor: "#94a3b8", // Slate 400
+              backgroundColor: "#94a3b8",
+              borderDash: [5, 5],
+              tension: 0.4,
+              borderWidth: 2,
+              pointRadius: 0,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: "index", intersect: false },
+          scales: {
+            x: {
+              grid: { display: false },
+              ticks: { color: "#64748b", font: { family: "Inter" } },
+            },
+            y: {
+              grid: { color: "#f1f5f9" },
+              ticks: {
+                callback: function (value) {
+                  return value + "%";
+                },
+                color: "#64748b",
+              },
+            },
+          },
+          plugins: {
+            tooltip: commonTooltip,
+            legend: {
+              position: "top",
+              labels: { usePointStyle: true, boxWidth: 8 },
+            },
+          },
+        },
+      });
+
+      // --- CHART 4: Risk/Reward Bar ---
+      const labelsBar = [
+        "ICICI Bank",
+        "L&T",
+        "Infosys",
+        "Tata Motors",
+        "Bharti Airtel",
+      ];
+      const ctxBar = document
+        .getElementById("riskRewardChart")
+        .getContext("2d");
+
+      // Processing Labels for Wrap
+      const processedLabelsBar = labelsBar.map((l) => wrapLabel(l, 16));
+
+      new Chart(ctxBar, {
+        type: "bar",
+        data: {
+          labels: processedLabelsBar,
+          datasets: [
+            {
+              label: "Upside Potential (%)",
+              data: [12, 11, 10, 14, 11],
+              backgroundColor: "#10b981", // Emerald
+              borderRadius: 4,
+            },
+            {
+              label: "Downside Risk (%)",
+              data: [4.5, 4.2, 4.0, 5.5, 5.0],
+              backgroundColor: "#ef4444", // Red
+              borderRadius: 4,
+            },
+          ],
+        },
+        options: {
+          indexAxis: "y",
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: {
+              grid: { color: "#f1f5f9" },
+              ticks: { color: "#64748b" },
+            },
+            y: {
+              grid: { display: false },
+              ticks: { color: "#334155", font: { weight: "bold" } },
+            },
+          },
+          plugins: {
+            tooltip: commonTooltip,
+            legend: { position: "bottom" },
+          },
+        },
+      });
     </script>
-</body>
+  </body>
 </html>
